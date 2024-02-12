@@ -1,0 +1,63 @@
+---
+
+const images = {
+  '1': import('@assets/1.svg?raw'),
+  '2': import('@assets/2.svg?raw'),
+  '3': import('@assets/3.svg?raw'),
+  '4': import('@assets/4.svg?raw'),
+  'alpha': import('@assets/alpha.svg?raw'),
+  'award': import('@assets/award.svg?raw'),
+  'beta': import('@assets/beta.svg?raw'),
+  'captain': import('@assets/captain.svg?raw'),
+  'chevron-down': import('@assets/chevron-down.svg?raw'),
+  'chevron-up': import('@assets/chevron-up.svg?raw'),
+  'chevron-left': import('@assets/chevron-left.svg?raw'),
+  'chevron-right': import('@assets/chevron-right.svg?raw'),
+  'chevrons-left': import('@assets/chevrons-left.svg?raw'),
+  'chevrons-right': import('@assets/chevrons-right.svg?raw'),
+  'cube': import('@assets/cube.svg?raw'),
+  'diamond': import('@assets/diamond.svg?raw'),
+  'eliminado': import('@assets/eliminado.svg?raw'),
+  'food': import('@assets/food.svg?raw'),
+  'gamma': import('@assets/gamma.svg?raw'),
+  'hombre': import('@assets/hombre.svg?raw'),
+  'internet': import('@assets/internet.svg?raw'),
+  'message': import('@assets/message.svg?raw'),
+  'mujer': import('@assets/mujer.svg?raw'),
+  'omega': import('@assets/omega.svg?raw'),
+  'packages': import('@assets/packages.svg?raw'),
+  'skull': import('@assets/skull.svg?raw'),
+  'trophy': import('@assets/trophy.svg?raw'),
+}
+
+
+
+interface Props {
+	name: keyof typeof images;
+  size?: number;
+}
+
+const { name, size = 24 } = Astro.props;
+const existIcon = !!images[name];
+
+function addAttributesToInnerHTMLString(innerHTML: string, size: number, attributes: Record<string, string>) {
+  const attributesString = Object.entries(attributes)
+    .map(([key, value]) => `${key}="${value}"`)
+    .join(' ');
+
+  return innerHTML.replace(/^<svg/, `<svg ${attributesString} width="${size}" height="${size}" `);
+}
+
+const getIcon = async () => {
+  const {default: iconRaw} = await images[name];
+  const icon = addAttributesToInnerHTMLString(iconRaw, size, {});
+  return icon;
+}
+
+
+
+const icon = existIcon ? await getIcon() : name;
+
+---
+
+<Fragment set:html={icon} width="32" />

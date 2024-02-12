@@ -1,0 +1,557 @@
+---
+import Layout from "@layouts/Layout.astro";
+import PosicionesPrueba from "@components/PosicionesPrueba.astro";
+import Icon from "@components/Icon.astro";
+import Team from "@components/Team.astro";
+import { desafio2023 } from "@data/desafio2023";
+
+interface Props {
+    semana: number;
+}
+
+export function getStaticPaths() {
+    return desafio2023.map(({ semana }) => ({ params: { semana } }));
+}
+
+const { semana: semanaString } = Astro.params;
+const semana = parseInt(semanaString.toString());
+
+const cicloInfo = desafio2023.find((item) => item.semana === semana);
+
+const isFirstCiclo = semana === 1;
+const isLastCiclo = semana === desafio2023.length;
+
+const hasChallenges = cicloInfo?.capitanes.ganador ?? cicloInfo?.sentenciaHambre.box ?? cicloInfo?.sentenciaPremioCastigo.box ?? cicloInfo?.desafioMuerte.eliminado;
+const hasPrices = cicloInfo?.premioExtra1.ganador ?? cicloInfo?.servicioInternet.participante ?? cicloInfo?.mensajeCasa.participante ?? cicloInfo?.cubo.ganador ?? cicloInfo?.subasta.platillo;
+const hasFinish = cicloInfo?.finalHombres.primero;
+---
+
+<Layout title="Desafio 2023">
+    <div class="bg-black text-white min-h-screen">
+    <div class="bg-gray-200 text-black flex flex-col md:flex-row md:rounded-b-xl">
+        <div>
+            <div
+                class="bg-rose-600 pb-6 rounded-b-3xl text-white pt-4 text-center min-w-56"
+            >
+                <a class="flex" href={`/desafio/2023`}><Icon name="chevron-left" /> Volver</a>
+                <h1 class="text-2xl font-bold">Desafío 2023</h1>
+                <div
+                    class="flex justify-center items-center gap-4 p-4 font-bold"
+                    transition:animate="slide"
+                >
+                    {
+                        !isFirstCiclo ? (
+                            <a
+                                href={`/desafio/2023/${semana - 1}`}
+                                class="rounded-full w-8 h-8 flex justify-center items-center bg-white text-rose-600"
+                            >
+                                <Icon name="chevron-left" />
+                            </a>
+                        ) : (
+                            <span class="w-8 h-8"> </span>
+                        )
+                    }
+                    <h2 class="text-lg">Semana {semana}</h2>
+                    {
+                        !isLastCiclo ? (
+                            <a
+                                href={`/desafio/2023/${semana + 1}`}
+                                class="rounded-full w-8 h-8 flex justify-center items-center bg-white text-rose-600"
+                            >
+                                <Icon name="chevron-right" />
+                            </a>
+                        ) : (
+                            <span class="w-8 h-8"> </span>
+                        )
+                    }
+                </div>
+            </div>
+
+            <div
+                class="flex rounded-xl bg-gradient-to-br from-slate-900 from-10% via-slate-800 via-50% to-slate-950 to-90% text-white items-stretch justify-around p-2 md:flex-col m-6"
+            >
+                <div class="flex flex-col items-center p-2 justify-end">
+                    <p class="text-3xl">{cicloInfo?.etapa}</p>
+                    <h3 class="font-bold text-slate-300">Etapa</h3>
+                </div>
+                {
+                    cicloInfo?.mejorCiclo.premio && (
+                        <div class="flex flex-col items-center p-2 justify-end">
+                            <div class="flex gap-1">
+                                {cicloInfo?.mejorCiclo.ganadores
+                                    .filter((team) => !!team)
+                                    .map((team) => (
+                                        <Team team={team} />
+                                    ))}
+                            </div>
+                            <p class="text-slate-400 font-bold">
+                                $ {cicloInfo?.mejorCiclo.premio}
+                            </p>
+                            <h3 class="text-slate-300 font-bold">
+                                Mejor equipo
+                            </h3>
+                        </div>
+                    )
+                }
+                <div class="p-2 flex flex-col justify-end items-center">
+                    <Icon name="skull" />
+                    <p>{cicloInfo?.desafioMuerte.eliminado}</p>
+                    <p>{cicloInfo?.desafioMuerte2.eliminado}</p>
+                    <p>{cicloInfo?.finalHombres.eliminado}</p>
+                    <p>{cicloInfo?.finalMujeres.eliminado}</p>
+                    <h3 class="text-slate-300 font-bold">Eliminado</h3>
+                </div>
+            </div>
+        </div>
+        {hasFinish &&
+        <div class="flex flex-col gap-2 p-4">
+            {
+                cicloInfo?.finalHombres.primero && (
+                    <div class="bg-gradient-to-br from-amber-300 from-10% via-yellow-400 via-50% to-amber-600 to-90% text-black rounded-lg p-4 m-4 flex gap-2 items-center">
+                        <span class="min-w-16 max-w-16">
+                            <Icon name="trophy" size={64} />
+                        </span>
+                        <div class="flex flex-row grow">
+                            <div class="grow flex flex-col basis-1/2">
+                                <Icon name="hombre" />
+                                <span>{cicloInfo?.finalHombres.primero}</span>
+                            </div>
+                            <div class="grow basis-1/2">
+                                <Icon name="mujer" />
+                                <span>{cicloInfo?.finalMujeres.primero}</span>
+                            </div>
+                        </div>
+                    </div>
+                )
+            }
+
+            {
+                cicloInfo?.finalHombres.segundo && (
+                    <div class="bg-gradient-to-br from-slate-900 from-10% via-slate-800 via-50% to-slate-950 to-90% text-white rounded-lg p-4 m-4 flex gap-2 items-center">
+                        <span class="min-w-16 max-w-16">
+                            <Icon name="2" size={64} />
+                        </span>
+                        <div class="flex flex-row grow">
+                            <div class="grow flex flex-col basis-1/2">
+                                <Icon name="hombre" />
+                                <span>{cicloInfo?.finalHombres.segundo}</span>
+                            </div>
+                            <div class="grow basis-1/2">
+                                <Icon name="mujer" />
+                                <span>{cicloInfo?.finalMujeres.segundo}</span>
+                            </div>
+                        </div>
+                    </div>
+                )
+            }
+
+            {
+                cicloInfo?.finalHombres.tercero && (
+                    <div class="bg-gradient-to-br from-slate-900 from-10% via-slate-800 via-50% to-slate-950 to-90% text-white rounded-lg p-4 m-4 flex gap-2 items-center">
+                        <span class="min-w-16 max-w-16">
+                            <Icon name="3" size={64} />
+                        </span>
+                        <div class="flex flex-row grow">
+                            <div class="grow flex flex-col basis-1/2">
+                                <Icon name="hombre" />
+                                <span>{cicloInfo?.finalHombres.tercero}</span>
+                            </div>
+                            <div class="grow basis-1/2">
+                                <Icon name="mujer" />
+                                <span>{cicloInfo?.finalMujeres.tercero}</span>
+                            </div>
+                        </div>
+                    </div>
+                )
+            }
+
+            {
+                cicloInfo?.finalHombres.eliminado && (
+                    <div class="bg-gradient-to-br from-slate-900 from-10% via-slate-800 via-50% to-slate-950 to-90% text-white rounded-lg p-4 m-4 flex gap-2 items-center">
+                        <span class="min-w-16 max-w-16">
+                            <Icon name="skull" size={64} />
+                        </span>
+                        <div class="flex flex-row grow">
+                            <div class="grow flex flex-col basis-1/2">
+                                <Icon name="hombre" />
+                                <span>{cicloInfo?.finalHombres.eliminado}</span>
+                            </div>
+                            <div class="grow basis-1/2">
+                                <Icon name="mujer" />
+                                <span>{cicloInfo?.finalMujeres.eliminado}</span>
+                            </div>
+                        </div>
+                    </div>
+                )
+            }
+        </div>}
+        <div>
+            {hasChallenges &&
+            <div class="p-4">
+                <h2 class="text-lg font-bold">Desafíos</h2>
+                <div class="flex flex-col gap-8 md:flex-row md:flex-wrap md:items-start">
+                    {
+                        cicloInfo?.capitanes.ganador && (
+                            <PosicionesPrueba
+                                prueba="Capitanes"
+                                box={"Capitanes"}
+                                primero={cicloInfo?.capitanes.ganador.team}
+                                segundo={cicloInfo?.capitanes.segundo.team}
+                                tercero={
+                                    cicloInfo?.capitanes?.tercero?.team ??
+                                    cicloInfo?.capitanes.eliminado.team
+                                }
+                                cuarto={
+                                    cicloInfo?.capitanes?.tercero?.team &&
+                                    cicloInfo?.capitanes.eliminado.team
+                                }
+                                sentenciados={[
+                                    cicloInfo?.capitanes?.eliminado?.team,
+                                ]}
+                            />
+                        )
+                    }
+                    {
+                        cicloInfo?.sentenciaHambre.box && (
+                            <PosicionesPrueba
+                                prueba="Sentencia y hambre"
+                                box={cicloInfo?.sentenciaHambre.box}
+                                primero={cicloInfo?.sentenciaHambre.primero}
+                                segundo={cicloInfo?.sentenciaHambre.segundo}
+                                tercero={cicloInfo?.sentenciaHambre.tercero}
+                                cuarto={cicloInfo?.sentenciaHambre.cuarto}
+                                sentenciados={
+                                    cicloInfo?.sentenciaHambre
+                                        .sentenciados as string[]
+                                }
+                            />
+                        )
+                    }
+                    {
+                        cicloInfo?.sentenciaServicios.box && (
+                            <PosicionesPrueba
+                                prueba="Sentencia y servicios"
+                                icon="food"
+                                box={cicloInfo?.sentenciaServicios.box}
+                                primero={cicloInfo?.sentenciaServicios.primero}
+                                segundo={cicloInfo?.sentenciaServicios.segundo}
+                                tercero={cicloInfo?.sentenciaServicios.tercero}
+                                cuarto={cicloInfo?.sentenciaServicios.cuarto}
+                                sentenciados={
+                                    cicloInfo?.sentenciaServicios
+                                        .sentenciados as string[]
+                                }
+                            />
+                        )
+                    }
+
+                    {
+                        cicloInfo?.sentenciaBienestar.box && (
+                            <PosicionesPrueba
+                                prueba="Sentencia y bienestar"
+                                box={cicloInfo?.sentenciaBienestar.box}
+                                primero={cicloInfo?.sentenciaBienestar.primero}
+                                segundo={cicloInfo?.sentenciaBienestar.segundo}
+                                tercero={cicloInfo?.sentenciaBienestar.tercero}
+                                cuarto={cicloInfo?.sentenciaBienestar.cuarto}
+                                sentenciados={
+                                    cicloInfo?.sentenciaBienestar
+                                        .sentenciados as string[]
+                                }
+                            />
+                        )
+                    }
+
+                    {
+                        cicloInfo?.sentenciaPremioCastigo.box && (
+                            <PosicionesPrueba
+                                prueba="Sentencia, premio y castigo"
+                                box={cicloInfo?.sentenciaPremioCastigo.box}
+                                primero={
+                                    cicloInfo?.sentenciaPremioCastigo.primero
+                                }
+                                segundo={
+                                    cicloInfo?.sentenciaPremioCastigo.segundo
+                                }
+                                tercero={
+                                    cicloInfo?.sentenciaPremioCastigo.tercero
+                                }
+                                cuarto={
+                                    cicloInfo?.sentenciaPremioCastigo.cuarto
+                                }
+                                sentenciados={
+                                    cicloInfo?.sentenciaPremioCastigo
+                                        .sentenciados as string[]
+                                }
+                            />
+                        )
+                    }
+
+                    {
+                        cicloInfo?.desafioMuerte.eliminado && (
+                            <div class="bg-gradient-to-br from-slate-950 from-10% via-slate-800 via-50% to-slate-900 to-90% text-white p-4 rounded-xl">
+                                <h3 class="font-bold">Desafío a Muerte</h3>
+                                <div class="flex pt-2">
+                                    <ol class="grow">
+                                        {cicloInfo?.desafioMuerte.primero && (
+                                            <li class="flex gap-1">
+                                                <Icon name="1" />
+                                                {
+                                                    cicloInfo?.desafioMuerte
+                                                        .primero
+                                                }
+                                            </li>
+                                        )}
+                                        {cicloInfo?.desafioMuerte.segundo && (
+                                            <li class="flex gap-1">
+                                                <Icon name="2" />
+                                                {
+                                                    cicloInfo?.desafioMuerte
+                                                        .segundo
+                                                }
+                                            </li>
+                                        )}
+                                        {cicloInfo?.desafioMuerte.tercero && (
+                                            <li class="flex gap-1">
+                                                <Icon name="3" />
+                                                {
+                                                    cicloInfo?.desafioMuerte
+                                                        .tercero
+                                                }
+                                            </li>
+                                        )}
+                                        <li class="flex gap-1">
+                                            <Icon name="skull" />{" "}
+                                            {cicloInfo?.desafioMuerte.eliminado}
+                                        </li>
+                                    </ol>
+                                    {cicloInfo?.desafioMuerte2.eliminado && (
+                                        <ol class="grow">
+                                            {cicloInfo?.desafioMuerte2
+                                                .primero && (
+                                                <li class="flex gap-1">
+                                                    <Icon name="1" />
+                                                    {
+                                                        cicloInfo
+                                                            ?.desafioMuerte2
+                                                            .primero
+                                                    }
+                                                </li>
+                                            )}
+                                            {cicloInfo?.desafioMuerte2
+                                                .segundo && (
+                                                <li class="flex gap-1">
+                                                    <Icon name="2" />
+                                                    {
+                                                        cicloInfo
+                                                            ?.desafioMuerte2
+                                                            .segundo
+                                                    }
+                                                </li>
+                                            )}
+                                            {cicloInfo?.desafioMuerte2
+                                                .tercero && (
+                                                <li class="flex gap-1">
+                                                    <Icon name="3" />
+                                                    {
+                                                        cicloInfo
+                                                            ?.desafioMuerte2
+                                                            .tercero
+                                                    }
+                                                </li>
+                                            )}
+                                            <li class="flex gap-1">
+                                                <Icon name="skull" />{" "}
+                                                {
+                                                    cicloInfo?.desafioMuerte2
+                                                        .eliminado
+                                                }
+                                            </li>
+                                        </ol>
+                                    )}
+                                </div>
+                            </div>
+                        )
+                    }
+                </div>
+            </div>}
+            {hasPrices && <div class="p-4">
+                <h2 class="text-lg font-bold">Premios</h2>
+                <div class="flex flex-col gap-8 md:flex-row md:flex-wrap items-start">
+                    {
+                        cicloInfo?.premioExtra1.ganador && (
+                            <div class="bg-black text-white rounded-xl md:max-w-60">
+                                <h4 class="font-bold px-4 pt-2">
+                                    Premios Extras
+                                </h4>
+                                <div class="bg-gradient-to-br from-yellow-500 from-10% via-yellow-400 via-50% to-yellow-600 to-90% text-black p-4 rounded-xl">
+                                    <div class="flex flex-row gap-2 items-center">
+                                        <span>
+                                            <Team
+                                                team={
+                                                    cicloInfo?.premioExtra1
+                                                        .ganador
+                                                }
+                                            />
+                                        </span>
+                                        <div class="flex flex-col">
+                                            <p class="font-bold">
+                                                {cicloInfo?.premioExtra1.premio}
+                                            </p>
+                                            <p>
+                                                {
+                                                    cicloInfo?.premioExtra1
+                                                        .patrocinador
+                                                }
+                                            </p>
+                                            <p class="text-xs">
+                                                {cicloInfo?.premioExtra1.prueba}
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    {cicloInfo?.premioExtra2.ganador && (
+                                        <div class="flex flex-row gap-2 pt-2 items-center">
+                                            <span>
+                                                <Team
+                                                    team={
+                                                        cicloInfo?.premioExtra2
+                                                            .ganador
+                                                    }
+                                                />
+                                            </span>
+                                            <div class="flex flex-col">
+                                                <p class="font-bold">
+                                                    {
+                                                        cicloInfo?.premioExtra2
+                                                            .premio
+                                                    }
+                                                </p>
+                                                <p>
+                                                    {
+                                                        cicloInfo?.premioExtra2
+                                                            .patrocinador
+                                                    }
+                                                </p>
+                                                <p class="text-xs">
+                                                    {
+                                                        cicloInfo?.premioExtra2
+                                                            .prueba
+                                                    }
+                                                </p>
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        )
+                    }
+
+                    {
+                        cicloInfo?.servicioInternet.participante && (
+                            <div class="bg-black text-white rounded-xl md:max-w-60">
+                                <h4 class="font-bold px-4 pt-2">
+                                    Servicio de Internet
+                                </h4>
+                                <div class="bg-gradient-to-br from-yellow-500 from-10% via-yellow-400 via-50% to-yellow-600 to-90% text-black p-4 rounded-xl">
+                                    <div class="flex gap-2 items-center">
+                                        <Team
+                                            team={
+                                                cicloInfo?.servicioInternet
+                                                    .equipo
+                                            }
+                                        />
+                                        {
+                                            cicloInfo?.servicioInternet
+                                                .participante
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        )
+                    }
+
+                    {
+                        cicloInfo?.mensajeCasa.participante && (
+                            <div class="bg-black text-white rounded-xl md:max-w-60">
+                                <h4 class="font-bold px-4 pt-2">
+                                    Mensaje de casa
+                                </h4>
+                            <div class="bg-black text-white rounded-xl">
+                                <div class="bg-gradient-to-br from-yellow-500 from-10% via-yellow-400 via-50% to-yellow-600 to-90% text-black p-4 rounded-xl">
+                                    <div class="flex gap-2 items-center">
+                                        <Team
+                                            team={cicloInfo?.mensajeCasa.equipo}
+                                        />
+                                        {cicloInfo?.mensajeCasa.participante}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        )
+                    }
+
+                    {
+                        cicloInfo?.cubo.ganador && (
+                            <div class="bg-black text-white rounded-xl md:max-w-60">
+                                <h4 class="font-bold px-4 pt-2">
+                                    El Cubo
+                                </h4>
+                            <div class="bg-gradient-to-br from-yellow-500 from-10% via-yellow-400 via-50% to-yellow-600 to-90% text-black p-4 rounded-xl">
+                                
+                                <ol>
+                                    <li class="italic">
+                                        {cicloInfo?.cubo.prueba}
+                                    </li>
+                                    <li>
+                                        Gana{" "}
+                                        <span class="font-bold">
+                                            {cicloInfo?.cubo.ganador}
+                                        </span>
+                                    </li>
+                                    <li>
+                                        Invita a{" "}
+                                        <span class="font-bold">
+                                            {cicloInfo?.cubo.invitado}
+                                        </span>
+                                    </li>
+                                </ol>
+                            </div>
+                        </div>
+                        )
+                    }
+
+                    {
+                        cicloInfo?.subasta.platillo && (
+                            <div class="bg-black text-white rounded-xl md:max-w-60">
+                                <h4 class="font-bold px-4 pt-2">
+                                    La Subasta
+                                </h4>
+                            <div class="bg-gradient-to-br from-yellow-500 from-10% via-yellow-400 via-50% to-yellow-600 to-90% text-black p-4 rounded-xl">
+                                
+                                <ol>
+                                    <li class="italic">
+                                        {cicloInfo?.subasta.platillo}
+                                    </li>
+                                    <li class="font-bold">
+                                        {cicloInfo?.subasta.ganador}
+                                    </li>
+                                    <li class="text-xs">
+                                        Inicio:{" "}
+                                        {cicloInfo?.subasta.precioInicial}
+                                    </li>
+                                    <li class="text-xs">
+                                        Vendida:{" "}
+                                        {cicloInfo?.subasta.precioFinal}
+                                    </li>
+                                </ol>
+                            </div>
+                        </div>
+                        )
+                    }
+                </div>
+            </div>}
+        </div>
+    </div>
+    </div>
+</Layout>

@@ -1,0 +1,19 @@
+---
+import Layout from '@layouts/Layout.astro';
+import { desafio2023 } from "@data/desafio2023";
+import Icon from "@components/Icon.astro";
+---
+
+<Layout title="Desafio 2023">
+	<main class="bg-gradient-to-br from-rose-500 from-10% via-rose-700 via-50% to-rose-600 to-90% text-white min-h-screen flex items-center">
+        <div class="px-4 flex flex-col md:flex-row items-center gap-2">
+        <a class="flex" href={`/desafio`}><Icon name="chevron-left" /> Volver</a>
+        <h1 class="text-2xl font-bold min-w-40">Desafio 2023: the Box 3</h1>
+        <ul class="flex flex-wrap gap-4 p-4 justify-center leading-8">
+            {desafio2023.map(({semana})=>
+            (<li><a class="p-2 bg-rose-500 rounded" href={`/desafio/2023/${semana}`}>Semana {semana}</a></li>)
+            )}
+        </ul>
+    </div>
+	</main>
+</Layout>

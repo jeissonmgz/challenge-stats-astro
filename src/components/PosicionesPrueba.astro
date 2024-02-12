@@ -1,0 +1,81 @@
+---
+import Icon from './Icon.astro';
+import Team from './Team.astro';
+
+
+interface Props {
+    icon: string;
+    prueba: string;
+	box?: string;
+	primero?: string;
+	segundo?: string;
+	tercero?: string;
+	cuarto?: string;
+	sentenciados: string[];
+}
+
+
+const { prueba, box, primero, segundo, tercero, cuarto, sentenciados } = Astro.props;
+
+const cubeColors = {
+    "Arco Iris": "bg-gradient-to-br from-red-500 from-10% via-indigo-500 via-50% to-sky-500 to-90% text-white",
+    "Rojo": "bg-gradient-to-br from-red-500 from-10% via-red-400 via-50% to-red-600 to-90% text-white",
+    "Azul": "bg-gradient-to-br from-sky-500 from-10% via-blue-400 via-50% to-sky-600 to-90% text-white",
+    "Amarillo": "bg-gradient-to-br from-amber-300 from-10% via-yellow-400 via-50% to-amber-600 to-90% text-black",
+    "Negro": "bg-black text-white",
+    "Capitanes": "bg-gradient-to-br from-emerald-500 from-10% via-emerald-400 via-50% to-emerald-600 to-90% text-white",
+}
+
+
+---
+<div class="bg-black rounded-xl text-white md:max-w-60">
+<div class=`pt-4 px-4 bg-white rounded-xl text-black flex flex-col gap-2 ${cubeColors[box]}`>
+
+    <h3 class="text-md text-left font-bold">{prueba}</h3>
+
+
+<div class="flex flex-row gap-4">
+    {primero && <div class="flex flex-col justify-end items-end items-center gap-1">
+        <Team team={primero} />
+        <div class="flex justify-center items-end w-8 h-10 bg-black text-white rounded-t-md">
+            <Icon name="1" />
+        </div>
+    </div>}
+    {segundo && <div class="flex flex-col justify-end items-end items-center gap-1">
+        <Team team={segundo} />
+        <div class="flex justify-center items-end w-8 h-9 bg-black text-white rounded-t-md">
+            <Icon name="2" />
+        </div>
+    </div>}
+    {tercero && (tercero?.map ? tercero?.map (item=>
+    <div class="flex flex-col justify-end items-end items-center gap-1">
+        <Team team={item} />
+        <div class="flex justify-center items-end w-8 h-8 bg-black text-white rounded-t-md">
+            <Icon name="3" />
+        </div>
+    </div>
+    ): <div class="flex flex-col justify-end items-end items-center gap-1">
+        <Team team={tercero} />
+        <div class="flex justify-center items-end w-8 h-8 bg-black text-white rounded-t-md">
+            <Icon name="3" />
+        </div>
+    </div>)}
+   {cuarto && <div class="flex flex-col justify-end items-end items-center gap-1">
+        <Team team={cuarto} />
+        <div class="flex justify-center items-end w-8 h-7 bg-black text-white rounded-t-md">
+            <Icon name="4" />
+        </div>
+    </div>}
+    
+</div>
+</div>
+<div class="flex flex-row gap-2 p-4 items-center text-xs">
+    <div class={`text-white`}><Icon name="skull" /></div>
+    <div>
+    {sentenciados.map(sentenciado=> <span class="flex gap-2 items-center">
+        
+        {sentenciado}</span>)}
+        </div>
+    
+</div>
+</div>

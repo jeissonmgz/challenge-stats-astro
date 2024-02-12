@@ -1,0 +1,31 @@
+---
+import Icon from './Icon.astro';
+
+interface Props {
+	team: "Alpha" | "Beta" | "Gamma" | "Omega";
+}
+
+const { team } = Astro.props;
+
+const teamsStyle = {
+    "Alpha": {
+        icon: "alpha",
+        styles: "text-white rounded-full bg-violet-600"
+    },
+    "Beta": {
+        icon: "beta",
+        styles: "text-white rounded-full bg-sky-500"
+    },
+    "Gamma": {
+        icon: "gamma",
+        styles: "text-white rounded-full bg-orange-500"
+    },
+    "Omega": {
+        icon: "omega",
+        styles: "text-white rounded-full bg-pink-500"
+    }
+}
+const teamSelected = teamsStyle[team];
+---
+
+<div class={`${teamSelected.styles} p-2`}><Icon name={teamSelected.icon} /></div>
