@@ -30,10 +30,10 @@ const images = {
   'trophy': import('@assets/trophy.svg?raw'),
 }
 
-
+export type tyIcon = keyof typeof images;
 
 interface Props {
-	name: keyof typeof images;
+	name: tyIcon;
   size?: number;
 }
 

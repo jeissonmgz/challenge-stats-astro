@@ -1,11 +1,5 @@
 ---
-import Icon from './Icon.astro';
-
-interface Props {
-	team: "Alpha" | "Beta" | "Gamma" | "Omega";
-}
-
-const { team } = Astro.props;
+import Icon, { type tyIcon } from './Icon.astro';
 
 const teamsStyle = {
     "Alpha": {
@@ -25,7 +19,15 @@ const teamsStyle = {
         styles: "text-white rounded-full bg-pink-500"
     }
 }
-const teamSelected = teamsStyle[team];
+
+export type tyTeamIcon = keyof typeof teamsStyle;
+
+interface Props {
+	team: tyTeamIcon;
+}
+
+const { team } = Astro.props;
+const teamSelected = teamsStyle[team as unknown as keyof typeof teamsStyle];
 ---
 
-<div class={`${teamSelected.styles} p-2`}><Icon name={teamSelected.icon} /></div>
+<div class={`${teamSelected.styles} p-2`}><Icon name={teamSelected.icon as tyIcon} /></div>

@@ -1,8 +1,8 @@
 ---
 import Layout from "@layouts/Layout.astro";
-import PosicionesPrueba from "@components/PosicionesPrueba.astro";
+import PosicionesPrueba, { type tyCubeColors } from "@components/PosicionesPrueba.astro";
 import Icon from "@components/Icon.astro";
-import Team from "@components/Team.astro";
+import Team, { type tyTeamIcon } from "@components/Team.astro";
 import { desafio2023 } from "@data/desafio2023";
 
 interface Props {
@@ -81,7 +81,7 @@ const hasFinish = cicloInfo?.finalHombres.primero;
                                 {cicloInfo?.mejorCiclo.ganadores
                                     .filter((team) => !!team)
                                     .map((team) => (
-                                        <Team team={team} />
+                                        <Team team={team as tyTeamIcon} />
                                     ))}
                             </div>
                             <p class="text-slate-400 font-bold">
@@ -195,15 +195,15 @@ const hasFinish = cicloInfo?.finalHombres.primero;
                             <PosicionesPrueba
                                 prueba="Capitanes"
                                 box={"Capitanes"}
-                                primero={cicloInfo?.capitanes.ganador.team}
-                                segundo={cicloInfo?.capitanes.segundo.team}
+                                primero={cicloInfo.capitanes.ganador.team as tyTeamIcon}
+                                segundo={cicloInfo.capitanes.segundo.team as tyTeamIcon}
                                 tercero={
-                                    cicloInfo?.capitanes?.tercero?.team ??
-                                    cicloInfo?.capitanes.eliminado.team
+                                    (cicloInfo?.capitanes?.tercero?.team ??
+                                    cicloInfo?.capitanes.eliminado.team) as unknown as tyTeamIcon
                                 }
                                 cuarto={
-                                    cicloInfo?.capitanes?.tercero?.team &&
-                                    cicloInfo?.capitanes.eliminado.team
+                                    (cicloInfo?.capitanes?.tercero?.team &&
+                                    cicloInfo?.capitanes.eliminado.team) as tyTeamIcon
                                 }
                                 sentenciados={[
                                     cicloInfo?.capitanes?.eliminado?.team,
@@ -215,11 +215,11 @@ const hasFinish = cicloInfo?.finalHombres.primero;
                         cicloInfo?.sentenciaHambre.box && (
                             <PosicionesPrueba
                                 prueba="Sentencia y hambre"
-                                box={cicloInfo?.sentenciaHambre.box}
-                                primero={cicloInfo?.sentenciaHambre.primero}
-                                segundo={cicloInfo?.sentenciaHambre.segundo}
-                                tercero={cicloInfo?.sentenciaHambre.tercero}
-                                cuarto={cicloInfo?.sentenciaHambre.cuarto}
+                                box={cicloInfo?.sentenciaHambre.box as tyCubeColors}
+                                primero={cicloInfo?.sentenciaHambre.primero as tyTeamIcon}
+                                segundo={cicloInfo?.sentenciaHambre.segundo as tyTeamIcon}
+                                tercero={cicloInfo?.sentenciaHambre.tercero as tyTeamIcon}
+                                cuarto={cicloInfo?.sentenciaHambre.cuarto as tyTeamIcon}
                                 sentenciados={
                                     cicloInfo?.sentenciaHambre
                                         .sentenciados as string[]
@@ -231,12 +231,11 @@ const hasFinish = cicloInfo?.finalHombres.primero;
                         cicloInfo?.sentenciaServicios.box && (
                             <PosicionesPrueba
                                 prueba="Sentencia y servicios"
-                                icon="food"
-                                box={cicloInfo?.sentenciaServicios.box}
-                                primero={cicloInfo?.sentenciaServicios.primero}
-                                segundo={cicloInfo?.sentenciaServicios.segundo}
-                                tercero={cicloInfo?.sentenciaServicios.tercero}
-                                cuarto={cicloInfo?.sentenciaServicios.cuarto}
+                                box={cicloInfo?.sentenciaServicios.box as tyCubeColors}
+                                primero={cicloInfo?.sentenciaServicios.primero as tyTeamIcon}
+                                segundo={cicloInfo?.sentenciaServicios.segundo as tyTeamIcon}
+                                tercero={cicloInfo?.sentenciaServicios.tercero as tyTeamIcon}
+                                cuarto={cicloInfo?.sentenciaServicios.cuarto as tyTeamIcon}
                                 sentenciados={
                                     cicloInfo?.sentenciaServicios
                                         .sentenciados as string[]
@@ -249,11 +248,11 @@ const hasFinish = cicloInfo?.finalHombres.primero;
                         cicloInfo?.sentenciaBienestar.box && (
                             <PosicionesPrueba
                                 prueba="Sentencia y bienestar"
-                                box={cicloInfo?.sentenciaBienestar.box}
-                                primero={cicloInfo?.sentenciaBienestar.primero}
-                                segundo={cicloInfo?.sentenciaBienestar.segundo}
-                                tercero={cicloInfo?.sentenciaBienestar.tercero}
-                                cuarto={cicloInfo?.sentenciaBienestar.cuarto}
+                                box={cicloInfo?.sentenciaBienestar.box as tyCubeColors}
+                                primero={cicloInfo?.sentenciaBienestar.primero as tyTeamIcon}
+                                segundo={cicloInfo?.sentenciaBienestar.segundo as tyTeamIcon}
+                                tercero={cicloInfo?.sentenciaBienestar.tercero as tyTeamIcon}
+                                cuarto={cicloInfo?.sentenciaBienestar.cuarto as tyTeamIcon}
                                 sentenciados={
                                     cicloInfo?.sentenciaBienestar
                                         .sentenciados as string[]
@@ -266,18 +265,18 @@ const hasFinish = cicloInfo?.finalHombres.primero;
                         cicloInfo?.sentenciaPremioCastigo.box && (
                             <PosicionesPrueba
                                 prueba="Sentencia, premio y castigo"
-                                box={cicloInfo?.sentenciaPremioCastigo.box}
+                                box={cicloInfo?.sentenciaPremioCastigo.box as tyCubeColors}
                                 primero={
-                                    cicloInfo?.sentenciaPremioCastigo.primero
+                                    cicloInfo?.sentenciaPremioCastigo.primero as tyTeamIcon
                                 }
                                 segundo={
-                                    cicloInfo?.sentenciaPremioCastigo.segundo
+                                    cicloInfo?.sentenciaPremioCastigo.segundo as tyTeamIcon
                                 }
                                 tercero={
-                                    cicloInfo?.sentenciaPremioCastigo.tercero
+                                    cicloInfo?.sentenciaPremioCastigo.tercero as tyTeamIcon
                                 }
                                 cuarto={
-                                    cicloInfo?.sentenciaPremioCastigo.cuarto
+                                    cicloInfo?.sentenciaPremioCastigo.cuarto as tyTeamIcon
                                 }
                                 sentenciados={
                                     cicloInfo?.sentenciaPremioCastigo
@@ -390,7 +389,7 @@ const hasFinish = cicloInfo?.finalHombres.primero;
                                             <Team
                                                 team={
                                                     cicloInfo?.premioExtra1
-                                                        .ganador
+                                                        .ganador as tyTeamIcon
                                                 }
                                             />
                                         </span>
@@ -416,7 +415,7 @@ const hasFinish = cicloInfo?.finalHombres.primero;
                                                 <Team
                                                     team={
                                                         cicloInfo?.premioExtra2
-                                                            .ganador
+                                                            .ganador as tyTeamIcon
                                                     }
                                                 />
                                             </span>
@@ -458,7 +457,7 @@ const hasFinish = cicloInfo?.finalHombres.primero;
                                         <Team
                                             team={
                                                 cicloInfo?.servicioInternet
-                                                    .equipo
+                                                    .equipo as tyTeamIcon
                                             }
                                         />
                                         {
@@ -481,7 +480,7 @@ const hasFinish = cicloInfo?.finalHombres.primero;
                                 <div class="bg-gradient-to-br from-yellow-500 from-10% via-yellow-400 via-50% to-yellow-600 to-90% text-black p-4 rounded-xl">
                                     <div class="flex gap-2 items-center">
                                         <Team
-                                            team={cicloInfo?.mensajeCasa.equipo}
+                                            team={cicloInfo?.mensajeCasa.equipo as tyTeamIcon}
                                         />
                                         {cicloInfo?.mensajeCasa.participante}
                                     </div>
